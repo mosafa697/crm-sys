@@ -3,10 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -15,10 +13,10 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $employers = User::factory()->count(2)->create();
+        $employees = User::factory()->count(2)->create();
 
-        foreach ($employers as $employer) {
-            $employer->assignRole('employer');
+        foreach ($employees as $employee) {
+            $employee->assignRole('employee');
         }
 
         $userCustomers = User::factory()->count(6)->create();
@@ -28,8 +26,8 @@ class UserSeeder extends Seeder
 
             Customer::create([
                 'user_id' => $userCustomer->id,
-                'assigned_to' => $employers->random()->id,
-                'created_by' => $employers->random()->id
+                'assigned_to' => $employees->random()->id,
+                'created_by' => $employees->random()->id
             ]);
         }
     }

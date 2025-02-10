@@ -54,10 +54,10 @@ class User extends Authenticatable
         });
     }
 
-    public function scopeEmployers($query)
+    public function scopeEmployees($query)
     {
         return $query->whereHas('roles', function ($q) {
-            $q->where('name', 'employer');
+            $q->where('name', 'employee');
         });
     }
 

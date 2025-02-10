@@ -16,10 +16,10 @@ return new class extends Migration
                 ->comment('Customer user id to store its data');
 
             $table->foreignId('assigned_to')->nullable()->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate()
-                ->comment('Employer Id who assigned this customer');
+                ->comment('Employee Id who assigned this customer');
 
             $table->foreignId('created_by')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate()
-                ->comment('User Id who created this customer (Admin or Employer)');
+                ->comment('User Id who created this customer (Admin or Employee)');
 
             $table->timestamps();
         });
