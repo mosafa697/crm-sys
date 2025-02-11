@@ -44,7 +44,7 @@ class User extends Authenticatable
 
     public function scopeAssignedCustomers($query, int $employee_id)
     {
-        return $query->customer()->whereHas('customer', fn($q) => $q->where('assigned_to', $employee_id));
+        return $query->whereHas('customer', fn($q) => $q->where('assigned_to', $employee_id));
     }
 
     public function scopeAdmins($query)

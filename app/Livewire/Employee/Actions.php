@@ -24,7 +24,7 @@ class Actions extends Component
 
     public function mount()
     {
-        $this->customers = User::assignedCustomers(Auth::user()->id)->get();
+        $this->customers = User::assignedCustomers(Auth::user()->id)->customers()->get();
         $this->actions = Action::where('employee_id', Auth::id())->with('customer')->latest()->get();
     }
 
@@ -47,8 +47,8 @@ class Actions extends Component
     public function render()
     {
         return view('livewire.employee.actions', [
-            'customers' => User::assignedCustomers(Auth::user()->id)->get(),
+            'customers' => User::assignedCustomers(Auth::user()->id)->customers()->get(),
             'actions' => Action::where('employee_id', Auth::id())->with('customer')->latest()->get(),
-        ]);
+        ])->layout('layouts.app', ['header' => 'Actions']);
     }
 }

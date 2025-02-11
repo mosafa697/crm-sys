@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Admin;
 
-use App\Livewire\Rules\ValidEmployee;
+use App\Livewire\Rules\ValidRole;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -17,16 +17,15 @@ class Customers extends Component
     {
         return [
             'name'  => 'required|string|max:255',
-            'email' => 'required|email|unique:customers,email',
-            'phone' => 'nullable|string|max:20',
-            'assigned_to' => ['nullable', new ValidEmployee()],
+            'email' => 'required|email|unique:users,email',
+            'assigned_to' => ['nullable', new ValidRole('employee')],
         ];
     }
 
     public function mount()
     {
-        $this->customers = User::customers()->all();
-        $this->employees = User::employees()->all();
+        $this->customers = User::customers()->get();
+        $this->employees = User::employees()->get();
     }
 
     public function addCustomer()
@@ -55,8 +54,8 @@ class Customers extends Component
     public function render()
     {
         return view('livewire.admin.customers', [
-            'customers' => User::customers()->all(),
-            'employees' => User::employees()->all()
-        ]);
+            'customers' => User::customers()->get(),
+            'employees' => User::employees()->get()
+        ])->layout('layouts.app');
     }
 }

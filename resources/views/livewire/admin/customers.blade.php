@@ -1,11 +1,14 @@
-<div>
-    <h2 class="text-lg font-bold mb-4">Customer Management</h2>
-
-    @if (session()->has('success'))
-        <div class="bg-green-500 text-white p-2 mb-3">
-            {{ session('success') }}
-        </div>
-    @endif
+<div class="px-40 py-12">
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Customer Management
+        </h2>
+        @if (session()->has('success'))
+            <div class="bg-green-500 text-white p-2 mb-3">
+                {{ session('success') }}
+            </div>
+        @endif
+    </x-slot>
 
     <form wire:submit.prevent="addCustomer">
         <input type="text" wire:model="name" placeholder="Name" class="border p-2">
@@ -23,12 +26,14 @@
 
     <h3 class="mt-4">Customers List</h3>
     <ul>
-        @foreach ($customers as $customer)
+        @forelse ($customers as $customer)
             <li>
-                {{ $customer->name }} - {{ $customer->email }}
-                (Assigned to: {{ optional($customer->employee)->name ?? 'No Employee' }})
+                {{ ++$loop->index }} - {{ $customer->name }}
+                (Assigned to: {{ optional($customer->customer?->assignedTo)->name ?? ' - ' }})
                 {{-- add change employee button or form --}}
             </li>
-        @endforeach
+        @empty
+            <li>No customers found.</li>
+        @endforelse
     </ul>
 </div>

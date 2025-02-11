@@ -29,10 +29,32 @@ new class extends Component
                 </div>
 
                 <!-- Navigation Links -->
+                @php
+                    $user = auth()->user();
+                @endphp
+
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if ($user->hasRole('admin'))
+                        <x-nav-link :href="route('admin.employees')" :active="request()->routeIs('admin.employees')" wire:navigate>
+                            {{ __('Employees') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('admin.customers')" :active="request()->routeIs('admin.customers')" wire:navigate>
+                            {{ __('Customers') }}
+                        </x-nav-link>
+                    @elseif ($user->hasRole('employee'))
+                        <x-nav-link :href="route('employee.customers')" :active="request()->routeIs('employee.customers')" wire:navigate>
+                            {{ __('My Customers') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('employee.actions')" :active="request()->routeIs('employee.actions')" wire:navigate>
+                            {{ __('My Actions') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 

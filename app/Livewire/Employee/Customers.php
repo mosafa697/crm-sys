@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Employee;
 
-use App\Livewire\Rules\ValidEmployee;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -10,23 +9,21 @@ use Livewire\Component;
 
 class Customers extends Component
 {
-    public $name, $email, $assigned_to;
+    public $name, $email;
     public $customers, $employees;
 
     protected function rules()
     {
         return [
             'name'  => 'required|string|max:255',
-            'email' => 'required|email|unique:customers,email',
-            'phone' => 'nullable|string|max:20',
-            'assigned_to' => ['nullable', new ValidEmployee()],
+            'email' => 'required|email|unique:users,email',
         ];
     }
 
     public function mount()
     {
         $this->employees = User::employees()->get();
-        $this->customers = User::assignedCustomers(Auth::user()->id)->get();
+        $this->customers = User::assignedCustomers(Auth::user()->id)->customers()->get();
     }
 
     public function addCustomer()
@@ -43,7 +40,7 @@ class Customers extends Component
 
         Customer::create([
             'user_id' => $user->id,
-            'assigned_to' => $this->assigned_to,
+            'assigned_to' => Auth::user()->id,
             'created_by' => Auth::user()->id,
         ]);
 
@@ -55,8 +52,8 @@ class Customers extends Component
     public function render()
     {
         return view('livewire.employee.customers', [
-            'employees' => User::employees()->all(),
-            'customers' => User::assignedCustomers(Auth::user()->id)->get(),
-        ]);
+            'employees' => User::employees()->get(),
+            'customers' => User::assignedCustomers(Auth::user()->id)->customers()->get(),
+        ])->layout('layouts.app');
     }
 }
