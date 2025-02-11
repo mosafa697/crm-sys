@@ -42,9 +42,9 @@ class User extends Authenticatable
         return $this->hasOne(Customer::class);
     }
 
-    public function assignedCustomers()
+    public function scopeAssignedCustomers($query, int $employee_id)
     {
-        return $this->hasMany(Customer::class, 'assigned_to');
+        return $query->customer()->whereHas('customer', fn($q) => $q->where('assigned_to', $employee_id));
     }
 
     public function scopeAdmins($query)
